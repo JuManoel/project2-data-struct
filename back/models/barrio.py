@@ -70,28 +70,79 @@ class Barrio:
                 arista_obj = Arista(**arista)
                 barrio.agregarArista(nodo_obj, arista_obj)
         return barrio
+    
     def dijkstra(self, start):
-        distances = {nodo: float('infinity') for nodo in self.nodos}
-        distances[start] = 0
+        distances = {nodo.id: float('infinity') for nodo in self.nodos}
+        distances[start.id] = 0
+        previous_nodes = {nodo.id: None for nodo in self.nodos}
         priority_queue = [(0, start)]
         while priority_queue:
             current_distance, current_node = heapq.heappop(priority_queue)
-            if current_distance > distances[current_node]:
+            if current_distance > distances[current_node.id]:
                 continue
             for arista in self.nodos[current_node]:
-                distance = current_distance + arista.weight
-                if distance < distances[arista.destino]:
-                    distances[arista.destino] = distance
-                    heapq.heappush(priority_queue, (distance, arista.destino))
-        return distances
+                if arista.obstruido:
+                    continue
+                distance = current_distance + arista.flujo
+                if distance < distances[arista.nodo.id]:
+                    distances[arista.nodo.id] = distance
+                    previous_nodes[arista.nodo.id] = (current_node, arista)
+                    heapq.heappush(priority_queue, (distance, arista.nodo))
+        return distances, previous_nodes
 
     def shortestPathsFromTanks(self):
-        tank_nodes = [nodo for nodo in self.nodos if nodo.tank is not None]
-        shortest_paths = {}
+        tank_nodes = [nodo for nodo in self.nodos if nodo.tank]
+        self.shortest_paths = {}
         for tank_node in tank_nodes:
-            shortest_paths[tank_node] = self.dijkstra(tank_node)
-        return shortest_paths
+            distances, previous_nodes = self.dijkstra(tank_node)
+            paths = {}
+            for nodo_id in distances:
+                path = []
+                current_id = nodo_id
+                while previous_nodes[current_id] is not None:
+                    current_node, arista = previous_nodes[current_id]
+                    path.insert(0, arista)
+                    current_id = current_node.id
+                paths[nodo_id] = path
+            self.shortest_paths[tank_node.id] = paths
+        return self.shortest_paths
     
-    
-    
-    
+    def maxFlow(self, source, sink):
+        def bfs(source, sink, parent):
+            visited = {nodo: False for nodo in self.nodos}
+            queue = [source]
+            visited[source] = True
+            while queue:
+                current_node = queue.pop(0)
+                for arista in self.nodos[current_node]:
+                    if not visited[arista.nodo] and arista.flujoOptimo > 0:
+                        queue.append(arista.nodo)
+                        visited[arista.nodo] = True
+                        parent[arista.nodo] = (current_node, arista)
+                        if arista.nodo == sink:
+                            return True
+            return False
+
+        parent = {}
+        max_flow = 0
+
+        while bfs(source, sink, parent):
+            path_flow = float('Inf')
+            s = sink
+            while s != source:
+                path_flow = min(path_flow, parent[s][1].flujoOptimo)
+                s = parent[s][0]
+
+            max_flow += path_flow
+
+            v = sink
+            while v != source:
+                u, arista = parent[v]
+                arista.flujoOptimo -= path_flow
+                reverse_arista = next((a for a in self.nodos[v] if a.nodo == u), None)
+                if reverse_arista:
+                    reverse_arista.flujoOptimo += path_flow
+                else:
+                    self.nodos[v].append(Arista(u, path_flow, False))
+                v = u
+        return max_flow

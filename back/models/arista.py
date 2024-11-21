@@ -8,6 +8,10 @@ class Arista:
         self.nodo = nodo
         self.obstruido = obstruido
         self.flujoOptimo = flujoOptimo
+        if obstruido == 1:
+            self.flujo *= 1.5
+        elif obstruido == 2:
+            self.flujo = float('inf')
 
     def __repr__(self):
         return f"Arista(flujo={self.flujo}, nodo={self.nodo}, obstruido={self.obstruido}, flujoOptimo={self.flujoOptimo})"
