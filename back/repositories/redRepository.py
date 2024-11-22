@@ -2,7 +2,7 @@ from back.models.red import Red
 import json
 
 class Repository:
-    def __init__(self, filePath):
+    def __init__(self, filePath = "./red.json"):
         self.filePath = filePath
 
     def _readFile(self):

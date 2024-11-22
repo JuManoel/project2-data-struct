@@ -135,7 +135,6 @@ class Barrio:
 
             max_flow += path_flow
 
-            v = sink
             while v != source:
                 u, arista = parent[v]
                 arista.flujoOptimo -= path_flow
