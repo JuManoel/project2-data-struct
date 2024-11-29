@@ -6,6 +6,7 @@ class Nodo:
         self.id = id
         self.costo = costo
         self.tank = tank
+    @classmethod
     def fromDict(self, data: dict):
         self.id = data.get('id', '')
         self.costo = data.get('costo', 0.0)

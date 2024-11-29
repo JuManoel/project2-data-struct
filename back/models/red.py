@@ -24,7 +24,8 @@ class Red:
     
     def toJson(self):
         return json.dumps(self.toDict())
-
+    
+    @classmethod
     def fromJson(self, json_str):
         data = json.loads(json_str)
         self.fromDict(data)
@@ -33,8 +34,12 @@ class Red:
         return {
             'barrios': {barrio: [arista.toDict() for arista in aristas] for barrio, aristas in self.barrios.items()}
         }
-
+    
+    @classmethod
     def fromDict(self, data):
         self.barrios = {}
         for barrio, aristas in data['barrios'].items():
             self.barrios[barrio] = [AristaBarrio.fromDict(arista) for arista in aristas]
+    
+    def optimizarRed(self):
+        pass
