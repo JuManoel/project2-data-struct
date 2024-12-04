@@ -1,22 +1,18 @@
 import json
-import json
 
 class Nodo:
-    def __init__(self, id: str, costo: float, tank=None):
+    def __init__(self, id: str, tank=None):
         self.id = id
-        self.costo = costo
         self.tank = tank
     @classmethod
     def fromDict(self, data: dict):
         self.id = data.get('id', '')
-        self.costo = data.get('costo', 0.0)
         self.tank = data.get('tank', None)
 
     def toDict(self) -> dict:
         return {
             'id': self.id,
-            'costo': self.costo,
-            'tank': self.tank
+            'tank': self.tank.toDict() if self.tank else None
         }
 
     @classmethod
