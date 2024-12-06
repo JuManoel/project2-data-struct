@@ -1,5 +1,8 @@
 import json
-
+from back.models.arista import Arista
+from back.models.nodo import Nodo
+from back.models.tank import Tank
+from back.models.barrio import Barrio
 class BaseDatos:
     def __init__(self):
         self.data = {"nodos": {}, "aristas": {}, "barrios": {}, "tanques": {}}

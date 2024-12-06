@@ -1,7 +1,7 @@
 import json
 
 class Tank:
-    def __init__(self, capacidad: float, capacidadTotal: float): 
+    def __init__(self, capacidad: float, capacidadTotal: float):
         self.capacidad = capacidad
         self.capacidadTotal = capacidadTotal
 
@@ -12,7 +12,7 @@ class Tank:
     def toDict(self):
         return {'capacidad': self.capacidad,
                 'capacidadTotal': self.capacidadTotal}
-        
+
 
     @classmethod
     def fromJson(cls, json_str: str):

@@ -4,6 +4,11 @@ class Nodo:
     def __init__(self, id: str, tank=None):
         self.id = id
         self.tank = tank
+
+    def __lt__(self, other):
+        # Comparar nodos por sus IDs para heapq
+        return self.id < other.id
+
     @classmethod
     def fromDict(self, data: dict):
         self.id = data.get('id', '')

@@ -9,7 +9,7 @@ class Arista:
         self.obstruido = obstruido
         self.flujoOptimo = flujoOptimo
         if obstruido == 1:
-            self.flujo *= 2
+            self.flujo *= 10
         elif obstruido == 2:
             self.flujo = float('inf')
 

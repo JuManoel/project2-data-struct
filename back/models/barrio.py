@@ -1,5 +1,7 @@
-from back.models.nodo import Nodo
 from back.models.arista import Arista
+from back.models.nodo import Nodo
+from back.models.tank import Tank
+
 import json
 import heapq
 
@@ -29,7 +31,8 @@ class Barrio:
     shortestPathsFromTanks():
         Computes the shortest paths from all nodes that have a tank.
     """
-    def __init__(self):
+    def __init__(self, id):
+        self.id = id
         self.nodos = {}  # Initialize nodos as a dictionary
         self.aristasBarrio = {}
         self.tanques = {}
@@ -46,7 +49,7 @@ class Barrio:
         # Convert Nodo keys to their IDs (strings) before serialization
         nodos_serializable = {nodo.id: {k: v.toDict() if isinstance(v, Tank) else v for k, v in nodo.__dict__.items()} for nodo in self.nodos}
         return json.dumps(nodos_serializable, indent=4, default=lambda o: o.__dict__)
-    
+
     @classmethod
     def fromJson(cls, json_str):
         data = json.loads(json_str)
@@ -72,60 +75,75 @@ class Barrio:
                 arista_obj = Arista(**arista)
                 barrio.agregarArista(nodo_obj, arista_obj)
         return barrio
-    
-    def dijkstra(self, start: Nodo) -> "Barrio":
+
+    def dijkstra(self, start: Nodo):
         # Inicializar estructuras
         distances = {nodo.id: float('inf') for nodo in self.nodos}
         distances[start.id] = 0
         previous_nodes = {nodo.id: None for nodo in self.nodos}
         visited = set()
-        heap = [(0, start)]
-    
+        heap = [(0, start)]  # (distancia, nodo)
+
         # Algoritmo principal
         while heap:
             current_distance, current_node = heapq.heappop(heap)
             if current_node in visited:
                 continue
             visited.add(current_node)
-            
-            for arista in self.nodos[current_node]:
+
+            for arista in self.nodos[current_node]:  # Iterar sobre las aristas
                 neighbor = arista.nodo
                 distance = current_distance + arista.flujo
                 if distance < distances[neighbor.id]:
                     distances[neighbor.id] = distance
                     previous_nodes[neighbor.id] = (current_node, arista)
                     heapq.heappush(heap, (distance, neighbor))
-        
-        # Crear un subgrafo con solo las aristas recorridas
-        subgrafo = Barrio()
-        for nodo_id in distances:
-            # Agregar el nodo actual al subgrafo
-            current_node = Nodo(id=nodo_id)
-            subgrafo.agregarNodo(current_node)
-            
-            # Agregar la arista que llevó al nodo actual, si existe
-            if previous_nodes[nodo_id] is not None:
-                previous_node, arista = previous_nodes[nodo_id]
-                subgrafo.agregarNodo(previous_node)
-                subgrafo.agregarArista(previous_node, arista)
 
-        return subgrafo
+        return distances, previous_nodes  # Retornar diccionarios
 
     def shortestPathsFromTanks(self):
         tank_nodes = [nodo for nodo in self.nodos if nodo.tank]
-        new_graph = Barrio()
-        for tank_node in tank_nodes:
-            distances, previous_nodes = self.dijkstra(tank_node)
-            for nodo_id in distances:
-                if nodo_id not in new_graph.nodos:
-                    new_graph.agregarNodo(Nodo(id=nodo_id))
-                path = []
-                current_id = nodo_id
-                while previous_nodes[current_id] is not None:
-                    current_node, arista = previous_nodes[current_id]
-                    path.insert(0, arista)
-                    current_id = current_node.id
-                for arista in path:
-                    new_graph.agregarArista(Nodo(id=current_id), arista)
-        return new_graph
-    
+        if not tank_nodes:
+            print("No se encontraron tanques.")
+            return Barrio(self.id)  # Retornar un barrio vacío si no hay tanques
+
+        distances_from_tanks = {tank.id: {} for tank in tank_nodes}
+        paths_from_tanks = {tank.id: {} for tank in tank_nodes}
+
+        for tank in tank_nodes:
+            print(f"Ejecutando Dijkstra desde el tanque: {tank.id}")
+            distances, previous_nodes = self.dijkstra(tank)
+            distances_from_tanks[tank.id] = distances
+            paths_from_tanks[tank.id] = previous_nodes
+
+        # Asignación de nodos a tanques
+        nodo_a_tanque = {}
+        for nodo in self.nodos:
+            min_distance = float('inf')
+            assigned_tank = None
+            for tank_id, distances in distances_from_tanks.items():
+                if nodo.id in distances and distances[nodo.id] < min_distance:
+                    min_distance = distances[nodo.id]
+                    assigned_tank = tank_id
+            if assigned_tank is not None:
+                nodo_a_tanque[nodo.id] = assigned_tank
+
+        # Construcción del subgrafo
+        subgrafo = Barrio(self.id)
+        for nodo_id, tank_id in nodo_a_tanque.items():
+            nodo = Nodo(id=nodo_id)
+            subgrafo.agregarNodo(nodo)
+
+            # Reconstrucción del camino hacia el tanque
+            current_id = nodo_id
+            while current_id != tank_id:
+                if isinstance(paths_from_tanks[tank_id][current_id], tuple):
+                    previous_node, arista = paths_from_tanks[tank_id][current_id]
+                    subgrafo.agregarNodo(previous_node)
+                    subgrafo.agregarArista(previous_node, arista)
+                    current_id = previous_node.id
+                else:
+                    print(f"Error: Expected tuple, but got {paths_from_tanks[tank_id][current_id]}")
+                    break
+
+        return subgrafo
