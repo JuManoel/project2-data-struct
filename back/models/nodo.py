@@ -1,5 +1,4 @@
 import json
-
 class Nodo:
     def __init__(self, id: str, tank=None):
         self.id = id
@@ -10,9 +9,10 @@ class Nodo:
         return self.id < other.id
 
     @classmethod
-    def fromDict(self, data: dict):
-        self.id = data.get('id', '')
-        self.tank = data.get('tank', None)
+    def fromDict(cls, data: dict):
+        id = data.get('id', '')
+        tank = data.get('tank', None)
+        return cls(id, tank)
 
     def toDict(self) -> dict:
         return {
