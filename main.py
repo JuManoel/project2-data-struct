@@ -5,8 +5,7 @@ import json
 controller = ControllerRed()
 
 # Crear el barrio
-response_barrio = controller.crearBarrio("A",)
-print(response_barrio)
+response_barrio = controller.crearBarrio("A")
 
 # Crear nodos con y sin tanques
 response_nodo_a = controller.crearNodo(id="A", tank={"capacidad": 100, "capacitdadTotal": 100})
@@ -19,18 +18,6 @@ response_nodo_g = controller.crearNodo(id="G")
 response_nodo_h = controller.crearNodo(id="H")
 response_nodo_i = controller.crearNodo(id="I")
 response_nodo_j = controller.crearNodo(id="J")
-
-print(response_nodo_a)
-print(response_nodo_d)
-print(response_nodo_b)
-print(response_nodo_c)
-print(response_nodo_e)
-print(response_nodo_f)
-print(response_nodo_g)
-print(response_nodo_h)
-print(response_nodo_i)
-print(response_nodo_j)
-
 # Crear aristas entre los nodos con diferentes pesos (flujo y flujo óptimo)
 response_arista_ab = controller.crearArista(flujo=2, nodoIdTo=response_nodo_b["nodo"]["id"],
                                              obstruido=0, flujoOptimo=2, barrioId="A",
@@ -59,24 +46,61 @@ response_arista_fi = controller.crearArista(flujo=2, nodoIdTo=response_nodo_i["n
 response_arista_gj = controller.crearArista(flujo=1, nodoIdTo=response_nodo_j["nodo"]["id"],
                                              obstruido=0, flujoOptimo=1, barrioId="A",
                                               nodoIdFrom="G")  # G -> J
-
-print(response_arista_ab)
-print(response_arista_ac)
-print(response_arista_bd)
-print(response_arista_be)
-print(response_arista_cf)
-print(response_arista_dg)
-print(response_arista_eh)
-print(response_arista_fi)
-print(response_arista_gj)
-
-
-
 # Guardar datos en archivo
+response_guardar = controller.guardarEnArchivo("datos.json")
+# Mostrar datos almacenados
+response_datos = controller.obtenerDatos()
+print("Datos almacenados en la base de datos:")
+print(json.dumps(response_datos["data"], indent=4))
+# Crear el barrio B
+response_barrio_b = controller.crearBarrio("B")
+
+# Crear nodos para el barrio B
+response_nodo_k = controller.crearNodo(id="K", tank={"capacidad": 200, "capacitdadTotal": 200})
+response_nodo_l = controller.crearNodo(id="L")
+response_nodo_m = controller.crearNodo(id="M")
+
+# Crear aristas para el barrio B
+response_arista_kl = controller.crearArista(flujo=3, nodoIdTo=response_nodo_l["nodo"]["id"],
+                                             obstruido=0, flujoOptimo=3, barrioId="B",
+                                              nodoIdFrom="K")  # K -> L
+response_arista_lm = controller.crearArista(flujo=2, nodoIdTo=response_nodo_m["nodo"]["id"],
+                                             obstruido=0, flujoOptimo=2, barrioId="B",
+                                              nodoIdFrom="L")  # L -> M
+
+# Crear el barrio C
+response_barrio_c = controller.crearBarrio("C")
+
+# Crear nodos para el barrio C
+response_nodo_n = controller.crearNodo(id="N", tank={"capacidad": 250, "capacitdadTotal": 250})
+response_nodo_o = controller.crearNodo(id="O")
+response_nodo_p = controller.crearNodo(id="P")
+
+# Crear aristas para el barrio C
+response_arista_no = controller.crearArista(flujo=4, nodoIdTo=response_nodo_o["nodo"]["id"],
+                                             obstruido=0, flujoOptimo=4, barrioId="C",
+                                              nodoIdFrom="N")  # N -> O
+response_arista_op = controller.crearArista(flujo=3, nodoIdTo=response_nodo_p["nodo"]["id"],
+                                             obstruido=0, flujoOptimo=3, barrioId="C",
+                                              nodoIdFrom="O")  # O -> P
+
+# Guardar datos en archivo nuevamente
 response_guardar = controller.guardarEnArchivo("datos.json")
 print(response_guardar)
 
-# Mostrar datos almacenados
+# Mostrar datos almacenados nuevamente
 response_datos = controller.obtenerDatos()
+
+
+# Crear aristas entre barrios
+response_arista_barrio_a_b = controller.crearAristaBarrio(flujo=5, tankId=response_nodo_a["nodo"]["id"],
+                                                          obstruido=0, barrioId="B", nodoId=response_nodo_k["nodo"]["id"],
+                                                          flujoOptimo=5)  # A -> K (Barrio A -> Barrio B)
+response_arista_barrio_b_c = controller.crearAristaBarrio(flujo=6, tankId=response_nodo_k["nodo"]["id"],
+                                                          obstruido=0, barrioId="C", nodoId=response_nodo_n["nodo"]["id"],
+                                                          flujoOptimo=6)  # K -> N (Barrio B -> Barrio C)
+
+response_guardar = controller.guardarEnArchivo("datos.json")
+print(response_guardar)
 print("Datos almacenados en la base de datos:")
 print(json.dumps(response_datos["data"], indent=4))

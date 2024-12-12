@@ -14,7 +14,7 @@ class AristaBarrio(Arista):
             'flujoOptimo': self.flujoOptimo,
             'tankId': self.tankId,
             'obstruido': self.obstruido,
-            'barrioId': self.barrio,
+            'barrioId': self.barrioId,
             'nodoId': self.nodoId,
         }
 
