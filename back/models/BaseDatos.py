@@ -3,12 +3,14 @@ from back.models.arista import Arista
 from back.models.nodo import Nodo
 from back.models.barrio import Barrio
 from back.models.aristaBarrio import AristaBarrio
+from back.models.red import Red
 class BaseDatos:
     def __init__(self):
-        self.data = {"nodos": {}, "barrios": {}, "red": {}}
+        self.data = {"nodos": {}, "barrios": {}, "red": {}, "barriosOptimos": {}, "redOptima": {}}
 
-    def almacenarNodo(self, nodo: Nodo):
+    def almacenarNodo(self, nodo: Nodo, barrio_id: str):
         self.data["nodos"][nodo.id] = nodo.toDict()
+        self.data["barrios"][barrio_id][nodo.id] = []
 
     def almacenarArista(self, arista: Arista, barrio_id: str, nodo_id: str):
         if nodo_id in self.data["barrios"][barrio_id]:
@@ -39,6 +41,23 @@ class BaseDatos:
             self.data["red"][barrioIdFrom].append(arista.toDict())
         else:
             self.data["red"][barrioIdFrom] = [arista.toDict()]
+
+    def optimizarBarrio(self, barrio_id: str):
+        barrio = Barrio(barrio_id)
+        nodos_con_tanque = [nodo_id for nodo_id, nodo in self.data["nodos"].items() if nodo["tank"] is not None]
+        barrio.barrio = self.data["barrios"][barrio_id]
+        barrioOptimo = barrio.optimizar(nodos_con_tanque)
+        self.data["barriosOptimos"][barrio_id] = barrioOptimo.toDict()
+        return barrioOptimo
+
+    def optimizarRed(self):
+        for barrio_id in self.data["barrios"]:
+            self.optimizarBarrio(barrio_id)
+        redOptima = Red()
+        redOptima.red = self.data["red"]
+        redOptima.optimizar()
+        self.data["redOptima"] = redOptima.toDict()
+        return redOptima
 
     def guardarEnArchivo(self, archivo: str):
         with open(archivo, "w") as file:

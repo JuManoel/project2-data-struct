@@ -1,211 +1,378 @@
 {
-  "nodos": {
-    "A": {
-      "id": "A",
-      "tank": {
-        "capacidad": 100,
-        "capacitdadTotal": 100
-      }
-    },
-    "D": {
-      "id": "D",
-      "tank": {
-        "capacidad": 150,
-        "capacitdadTotal": 150
-      }
-    },
-    "B": {
-      "id": "B",
-      "tank": null
-    },
-    "C": {
-      "id": "C",
-      "tank": null
-    },
-    "E": {
-      "id": "E",
-      "tank": null
-    },
-    "F": {
-      "id": "F",
-      "tank": null
-    },
-    "G": {
-      "id": "G",
-      "tank": null
-    },
-    "H": {
-      "id": "H",
-      "tank": null
-    },
-    "I": {
-      "id": "I",
-      "tank": null
-    },
-    "J": {
-      "id": "J",
-      "tank": null
-    },
-    "K": {
-      "id": "K",
-      "tank": {
-        "capacidad": 200,
-        "capacitdadTotal": 200
-      }
-    },
-    "L": {
-      "id": "L",
-      "tank": null
-    },
-    "M": {
-      "id": "M",
-      "tank": null
-    },
-    "N": {
-      "id": "N",
-      "tank": {
-        "capacidad": 250,
-        "capacitdadTotal": 250
-      }
-    },
-    "O": {
-      "id": "O",
-      "tank": null
-    },
-    "P": {
-      "id": "P",
-      "tank": null
-    }
-  },
-  "barrios": {
-    "A": {
-      "A": [
-        {
-          "flujo": 2,
-          "nodoId": "B",
-          "obstruido": 0,
-          "flujoOptimo": 2
+    "nodos": {
+        "A": {
+            "id": "A",
+            "tank": {
+                "capacidad": 100,
+                "capacitdadTotal": 100
+            }
         },
-        {
-          "flujo": 3,
-          "nodoId": "C",
-          "obstruido": 0,
-          "flujoOptimo": 3
-        }
-      ],
-      "B": [
-        {
-          "flujo": 1,
-          "nodoId": "D",
-          "obstruido": 0,
-          "flujoOptimo": 1
+        "D": {
+            "id": "D",
+            "tank": {
+                "capacidad": 150,
+                "capacitdadTotal": 150
+            }
         },
-        {
-          "flujo": 4,
-          "nodoId": "E",
-          "obstruido": 0,
-          "flujoOptimo": 4
+        "B": {
+            "id": "B",
+            "tank": null
+        },
+        "C": {
+            "id": "C",
+            "tank": null
+        },
+        "E": {
+            "id": "E",
+            "tank": null
+        },
+        "F": {
+            "id": "F",
+            "tank": null
+        },
+        "G": {
+            "id": "G",
+            "tank": null
+        },
+        "H": {
+            "id": "H",
+            "tank": null
+        },
+        "I": {
+            "id": "I",
+            "tank": null
+        },
+        "J": {
+            "id": "J",
+            "tank": null
+        },
+        "K": {
+            "id": "K",
+            "tank": {
+                "capacidad": 200,
+                "capacitdadTotal": 200
+            }
+        },
+        "L": {
+            "id": "L",
+            "tank": null
+        },
+        "M": {
+            "id": "M",
+            "tank": null
+        },
+        "N": {
+            "id": "N",
+            "tank": {
+                "capacidad": 250,
+                "capacitdadTotal": 250
+            }
+        },
+        "O": {
+            "id": "O",
+            "tank": null
+        },
+        "P": {
+            "id": "P",
+            "tank": null
         }
-      ],
-      "C": [
-        {
-          "flujo": 2,
-          "nodoId": "F",
-          "obstruido": 0,
-          "flujoOptimo": 2
-        }
-      ],
-      "D": [
-        {
-          "flujo": 1,
-          "nodoId": "G",
-          "obstruido": 0,
-          "flujoOptimo": 1
-        }
-      ],
-      "E": [
-        {
-          "flujo": 3,
-          "nodoId": "H",
-          "obstruido": 0,
-          "flujoOptimo": 3
-        }
-      ],
-      "F": [
-        {
-          "flujo": 2,
-          "nodoId": "I",
-          "obstruido": 0,
-          "flujoOptimo": 2
-        }
-      ],
-      "G": [
-        {
-          "flujo": 1,
-          "nodoId": "J",
-          "obstruido": 0,
-          "flujoOptimo": 1
-        }
-      ]
     },
-    "B": {
-      "K": [
-        {
-          "flujo": 3,
-          "nodoId": "L",
-          "obstruido": 0,
-          "flujoOptimo": 3
+    "barrios": {
+        "A": {
+            "A": [
+                {
+                    "flujo": 2,
+                    "nodoId": "B",
+                    "obstruido": 0,
+                    "flujoOptimo": 2
+                },
+                {
+                    "flujo": 3,
+                    "nodoId": "C",
+                    "obstruido": 0,
+                    "flujoOptimo": 3
+                }
+            ],
+            "D": [
+                {
+                    "flujo": 1,
+                    "nodoId": "G",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "B": [
+                {
+                    "flujo": 1,
+                    "nodoId": "D",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 4,
+                    "nodoId": "E",
+                    "obstruido": 0,
+                    "flujoOptimo": 4
+                }
+            ],
+            "C": [
+                {
+                    "flujo": 2,
+                    "nodoId": "F",
+                    "obstruido": 0,
+                    "flujoOptimo": 2
+                }
+            ],
+            "E": [
+                {
+                    "flujo": 3,
+                    "nodoId": "H",
+                    "obstruido": 0,
+                    "flujoOptimo": 3
+                }
+            ],
+            "F": [
+                {
+                    "flujo": 2,
+                    "nodoId": "I",
+                    "obstruido": 0,
+                    "flujoOptimo": 2
+                }
+            ],
+            "G": [
+                {
+                    "flujo": 1,
+                    "nodoId": "J",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "H": [],
+            "I": [],
+            "J": []
+        },
+        "B": {
+            "K": [
+                {
+                    "flujo": 3,
+                    "nodoId": "L",
+                    "obstruido": 0,
+                    "flujoOptimo": 3
+                }
+            ],
+            "L": [
+                {
+                    "flujo": 2,
+                    "nodoId": "M",
+                    "obstruido": 0,
+                    "flujoOptimo": 2
+                }
+            ],
+            "M": []
+        },
+        "C": {
+            "N": [
+                {
+                    "flujo": 4,
+                    "nodoId": "O",
+                    "obstruido": 0,
+                    "flujoOptimo": 4
+                }
+            ],
+            "O": [
+                {
+                    "flujo": 3,
+                    "nodoId": "P",
+                    "obstruido": 0,
+                    "flujoOptimo": 3
+                }
+            ],
+            "P": []
         }
-      ],
-      "L": [
-        {
-          "flujo": 2,
-          "nodoId": "M",
-          "obstruido": 0,
-          "flujoOptimo": 2
-        }
-      ]
     },
-    "C": {
-      "N": [
-        {
-          "flujo": 4,
-          "nodoId": "O",
-          "obstruido": 0,
-          "flujoOptimo": 4
+    "red": {
+        "A": [
+            {
+                "flujo": 5,
+                "flujoOptimo": 5,
+                "tankId": "A",
+                "obstruido": 0,
+                "barrioId": "B",
+                "nodoId": "K"
+            }
+        ],
+        "B": [
+            {
+                "flujo": 6,
+                "flujoOptimo": 6,
+                "tankId": "K",
+                "obstruido": 0,
+                "barrioId": "C",
+                "nodoId": "N"
+            }
+        ],
+        "C": []
+    },
+    "barriosOptimos": {
+        "A": {
+            "A": [
+                {
+                    "flujo": 2,
+                    "nodoId": "B",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 3,
+                    "nodoId": "C",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 2,
+                    "nodoId": "B",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 3,
+                    "nodoId": "C",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 2,
+                    "nodoId": "B",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 3,
+                    "nodoId": "C",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "D": [
+                {
+                    "flujo": 1,
+                    "nodoId": "G",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 1,
+                    "nodoId": "G",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "B": [
+                {
+                    "flujo": 4,
+                    "nodoId": "E",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 4,
+                    "nodoId": "E",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "C": [
+                {
+                    "flujo": 2,
+                    "nodoId": "F",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                },
+                {
+                    "flujo": 2,
+                    "nodoId": "F",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "E": [
+                {
+                    "flujo": 3,
+                    "nodoId": "H",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "F": [
+                {
+                    "flujo": 2,
+                    "nodoId": "I",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "G": [
+                {
+                    "flujo": 1,
+                    "nodoId": "J",
+                    "obstruido": 0,
+                    "flujoOptimo": 1
+                }
+            ],
+            "H": [],
+            "I": [],
+            "J": []
+        },
+        "B": {
+            "K": [
+                {
+                    "flujo": 3,
+                    "nodoId": "L",
+                    "obstruido": 0,
+                    "flujoOptimo": 2
+                },
+                {
+                    "flujo": 3,
+                    "nodoId": "L",
+                    "obstruido": 0,
+                    "flujoOptimo": 2
+                }
+            ],
+            "L": [
+                {
+                    "flujo": 2,
+                    "nodoId": "M",
+                    "obstruido": 0,
+                    "flujoOptimo": 2
+                }
+            ],
+            "M": []
+        },
+        "C": {
+            "N": [
+                {
+                    "flujo": 4,
+                    "nodoId": "O",
+                    "obstruido": 0,
+                    "flujoOptimo": 3
+                },
+                {
+                    "flujo": 4,
+                    "nodoId": "O",
+                    "obstruido": 0,
+                    "flujoOptimo": 3
+                }
+            ],
+            "O": [
+                {
+                    "flujo": 3,
+                    "nodoId": "P",
+                    "obstruido": 0,
+                    "flujoOptimo": 3
+                }
+            ],
+            "P": []
         }
-      ],
-      "O": [
-        {
-          "flujo": 3,
-          "nodoId": "P",
-          "obstruido": 0,
-          "flujoOptimo": 3
-        }
-      ]
-    }
-  },
-  "red": {
-    "A": [
-      {
-        "flujo": 5,
-        "flujoOptimo": 5,
-        "tankId": "A",
-        "obstruido": 0,
-        "barrioId": "B",
-        "nodoId": "K"
-      }
-    ],
-    "B": [
-      {
-        "flujo": 6,
-        "flujoOptimo": 6,
-        "tankId": "K",
-        "obstruido": 0,
-        "barrioId": "C",
-        "nodoId": "N"
-      }
-    ],
-    "C": []
-  }
+    },
+    "redOptima": {}
 }

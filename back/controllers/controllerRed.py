@@ -7,10 +7,10 @@ class ControllerRed:
     def __init__(self):
         self.baseDatos = BaseDatos()
 
-    def crearNodo(self, id: str, tank=None):
+    def crearNodo(self, id: str, tank=None, barrioId=None):
         """Crear un nuevo nodo y almacenarlo."""
         nodo = Nodo(id, tank)
-        self.baseDatos.almacenarNodo(nodo)
+        self.baseDatos.almacenarNodo(nodo, barrioId)
         return {"message": "Nodo creado exitosamente", "nodo": nodo.toDict()}
 
     def crearArista(self, flujo: int, nodoIdTo: str, obstruido: int, flujoOptimo: int, barrioId: str, nodoIdFrom: str): 
@@ -29,6 +29,15 @@ class ControllerRed:
         arista = AristaBarrio(flujo, tankId, obstruido, barrioId, nodoId, flujoOptimo)
         self.baseDatos.almacenarAristaBarrio(arista)
         return {"message": "Arista creada exitosamente", "arista": arista.toDict()}
+    
+    def optimizarBarrio(self, barrioId: str):
+        barrioOprimo = self.baseDatos.optimizarBarrio(barrioId)
+        return {"message": "Barrio optimizado exitosamente", "barrioOptimo": barrioOprimo.toDict()}
+
+    def optimizarRed(self):
+        redOptima = self.baseDatos.optimizarRed()
+        return {"message": "Red optimizada exitosamente", "redOptima": redOptima.toDict()}
+
     def obtenerDatos(self):
         """Obtener todos los datos de la red."""
         data = self.baseDatos.obtenerDatos()
