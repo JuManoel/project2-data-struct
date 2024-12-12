@@ -1,53 +1,63 @@
-import pygame
-import sys
-from front.menuVar import ResponsiveMenu
-from front.grafo import parse_grafo, draw_grafo
+import pygame as pg
+from front.ViewRed import ViewRed
 
+class Principal:
+    def __init__(self):
+        self.estado = "menu"
+        pg.init()
+        self.screen = pg.display.set_mode((1000, 600))
+        pg.display.set_caption("Menu")
+        self.font = pg.font.Font(None, 40)
+        self.menu()
 
-def main():
-    pygame.init()
-    width, height = 800, 500
-    screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-    pygame.display.set_caption("Gestión de Redes")
+    def dibujar_texto(self, texto, pos):
+        texto_surface = self.font.render(texto, True, (0, 0, 0))  # Texto en color negro
+        self.screen.blit(texto_surface, pos)
 
-    logo = pygame.image.load('logo.jpg').convert_alpha()
-    logo = pygame.transform.scale(logo, (width, height))
-    logo.set_alpha(40)
+    def menu(self):
+        running = True
+        while running:
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    running = False
+                elif event.type == pg.MOUSEBUTTONDOWN:
+                    mouse_pos = pg.mouse.get_pos()
+                    if self.visualizar_red_btn.collidepoint(mouse_pos):
+                        view_red = ViewRed("datos.json")
+                        view_red.correr()
+                    elif self.visualizar_barrio_btn.collidepoint(mouse_pos):
+                        print("Visualizar Barrio")
+                    elif self.agregar_nodo_btn.collidepoint(mouse_pos):
+                        print("Agregar Nodo")
+                    elif self.crear_barrio_btn.collidepoint(mouse_pos):
+                        print("Crear Barrio")
 
-    menu_options = ["Gestión de la Red", "Simulaciones", "Optimización", "Mantenimiento", "Visualización", "Salir"]
-    menu = ResponsiveMenu(screen, menu_options)
+            self.screen.fill((255, 255, 255))  # Fondo blanco
 
+<<<<<<< HEAD
     nodos, aristas = parse_grafo(r"./front/datos.json", "A")
+=======
+            # Dibujar botones con cajas alrededor
+            self.visualizar_red_btn = pg.draw.rect(self.screen, (0, 0, 255), (100, 100, 300, 50))
+            self.visualizar_red_box = pg.draw.rect(self.screen, (0, 0, 0), (95, 95, 310, 60), 3)
+            self.visualizar_barrio_btn = pg.draw.rect(self.screen, (0, 0, 255), (100, 200, 300, 50))
+            self.visualizar_barrio_box = pg.draw.rect(self.screen, (0, 0, 0), (95, 195, 310, 60), 3)
+            self.agregar_nodo_btn = pg.draw.rect(self.screen, (0, 0, 255), (100, 300, 300, 50))
+            self.agregar_nodo_box = pg.draw.rect(self.screen, (0, 0, 0), (95, 295, 310, 60), 3)
+            self.crear_barrio_btn = pg.draw.rect(self.screen, (0, 0, 255), (100, 400, 300, 50))
+            self.crear_barrio_box = pg.draw.rect(self.screen, (0, 0, 0), (95, 395, 310, 60), 3)
+>>>>>>> 053c822 (front maybe is ok)
 
+            # Dibujar texto de botones
+            self.dibujar_texto("Visualizar Red", (110, 110))
+            self.dibujar_texto("Visualizar Barrio", (110, 210))
+            self.dibujar_texto("Agregar Nodo", (110, 310))
+            self.dibujar_texto("Crear Barrio", (110, 410))
 
-    offset = [0, 0]
-    running = True
-    while running:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.VIDEORESIZE:
-                width, height = event.w, event.h
-                screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-                logo = pygame.transform.scale(logo, (width, height))
-                menu.calculate_layout()
-            elif event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 4:  # Scroll up
-                    offset[1] -= 20
-                elif event.button == 5:  # Scroll down
-                    offset[1] += 20
-                elif event.button == 1:  # Left click
-                    menu.handle_event(event)
+            pg.display.flip()
 
-        screen.fill((255, 255, 255))
-        screen.blit(logo, (0, 0))
-        draw_grafo(screen, nodos, aristas, offset)
-        menu.draw()
-        pygame.display.flip()
+        pg.quit()
 
-    pygame.quit()
-    sys.exit()
-
-
+# Ejecutar la aplicación
 if __name__ == "__main__":
-    main()
+    Principal()

@@ -83,7 +83,7 @@ def main():
     pygame.display.set_caption("Grafo Personalizado")
 
     # Cargar datos del grafo
-    nodos, aristas = parse_grafo("grafo.json")  # Cambia a la ruta de tu archivo JSON
+    nodos, aristas = parse_grafo("datos.json")  # Cambia a la ruta de tu archivo JSON
     offset = (0, 0)
 
     clock = pygame.time.Clock()

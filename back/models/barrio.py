@@ -142,4 +142,54 @@ class Barrio:
                     print(f"Error: Expected tuple, but got {paths_from_tanks[tank_id][current_id]}")
                     break
 
-        return subgrafo
+        return 
+    def asignarTanqueAlNodoMasLejano(self):
+        # Asignamos un tanque al nodo más lejano de este barrio
+        distancias = self._calcularDistanciasDesdeElNodoInicial()
+        nodoMasLejano = max(distancias, key=distancias.get)
+        
+        nodo = self.nodos[nodoMasLejano]
+        tanque = Tank(capacidad=150)  # Asignar tanque con capacidad de 150 (ejemplo)
+        nodo.tank = tanque  # Asignamos el tanque al nodo más lejano
+
+    def _calcularDistanciasDesdeElNodoInicial(self):
+        # Realizamos un BFS para calcular las distancias de todos los nodos desde un nodo inicial
+        distancias = {nodo: float('inf') for nodo in self.nodos}  # Inicializamos todas las distancias como infinitas
+        inicio = list(self.nodos.keys())[0]  # Tomamos el primer nodo como punto de partida
+        distancias[inicio] = 0
+        
+        cola = deque([inicio])  # Inicializamos BFS con el nodo inicial
+        while cola:
+            nodoActual = cola.popleft()
+            for arista in self.nodos[nodoActual].aristas:
+                destino = arista.nodo.id
+                if distancias[destino] == float('inf'):  # Si el nodo no ha sido visitado
+                    distancias[destino] = distancias[nodoActual] + 1
+                    cola.append(destino)
+
+        return distancias
+    def borrarArista(self, nodo_origen, nodo_destino):
+        # Eliminamos la arista de los nodos involucrados
+        if nodo_origen in self.nodos and nodo_destino in self.nodos:
+            self.nodos[nodo_origen].borrarArista(nodo_destino)
+            self.nodos[nodo_destino].borrarArista(nodo_origen)
+        else:
+            raise ValueError(f"Uno de los nodos {nodo_origen} o {nodo_destino} no existe.")
+
+    def borrarNodo(self, nodo_id):
+        if nodo_id in self.nodos:
+            nodo = self.nodos[nodo_id]
+            # Primero eliminamos las aristas de otros nodos que apuntan a este nodo
+            for arista in nodo.aristas:
+                otro_nodo = arista.nodo_origen if arista.nodo_destino.id == nodo_id else arista.nodo_destino
+                otro_nodo.borrarArista(nodo_id)
+            # Ahora eliminamos el nodo
+            del self.nodos[nodo_id]
+        else:
+            raise ValueError(f"Nodo {nodo_id} no encontrado.")
+
+    def borrarTanque(self, nodo_id):
+        if nodo_id in self.nodos:
+            self.nodos[nodo_id].tank = None  # Eliminamos el tanque del nodo
+        else:
+            raise ValueError(f"Nodo {nodo_id} no encontrado.")
