@@ -1,7 +1,7 @@
 import pygame
 import sys
-from menuVar import ResponsiveMenu
-from grafo import parse_grafo, draw_grafo
+from front.menuVar import ResponsiveMenu
+from front.grafo import parse_grafo, draw_grafo
 
 
 def main():
@@ -17,7 +17,7 @@ def main():
     menu_options = ["Gestión de la Red", "Simulaciones", "Optimización", "Mantenimiento", "Visualización", "Salir"]
     menu = ResponsiveMenu(screen, menu_options)
 
-    nodos, aristas = parse_grafo(r"C:\Users\Usuario\Documents\Proyectos Estructura de Datos\Project2\project2-data-struct\front\datos.json")
+    nodos, aristas = parse_grafo(r"./front/datos.json", "A")
 
 
     offset = [0, 0]

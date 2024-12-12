@@ -1,6 +1,5 @@
 from back.models.arista import Arista
 from back.models.nodo import Nodo
-from back.models.tank import Tank
 
 import json
 import heapq
@@ -33,22 +32,19 @@ class Barrio:
     """
     def __init__(self, id):
         self.id = id
-        self.nodos = {}  # Initialize nodos as a dictionary
-        self.aristasBarrio = {}
-        self.tanques = {}
-    def agregarNodo(self, nodo : Nodo):
-        if nodo not in self.nodos:
-            self.nodos[nodo] = []
+        self.barrio = {}
+    def agregarNodo(self, nodoId : str):
+        if nodoId not in self.barrio:
+            self.barrio[nodoId] = []
 
-    def agregarArista(self, nodo:Nodo, arista:Arista):
-        if nodo in self.nodos:
-            self.nodos[nodo].append(arista)
+    def agregarArista(self, nodoId:str, arista:Arista):
+        if nodoId in self.barrio:
+            self.nodos[nodoId].append(arista)
         else:
-            self.nodos[nodo] = [arista]
+            self.nodos[nodoId] = [arista]
+
     def toJson(self):
-        # Convert Nodo keys to their IDs (strings) before serialization
-        nodos_serializable = {nodo.id: {k: v.toDict() if isinstance(v, Tank) else v for k, v in nodo.__dict__.items()} for nodo in self.nodos}
-        return json.dumps(nodos_serializable, indent=4, default=lambda o: o.__dict__)
+        return json.dumps(self.toDict())
 
     @classmethod
     def fromJson(cls, json_str):
@@ -63,7 +59,7 @@ class Barrio:
         return barrio
 
     def toDict(self):
-        return {nodo.id: [arista.toDict() for arista in aristas] for nodo, aristas in self.nodos.items()}
+        return {nodo: [arista.toDict() for arista in aristas] for nodo, aristas in self.barrio.items()}
 
     @classmethod
     def fromDict(cls, dict_data):

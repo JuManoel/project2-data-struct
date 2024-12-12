@@ -4,23 +4,23 @@ import json
 
 class Red:
     def __init__(self):
-        self.barrios = {}
+        self.red = {}
 
-    def agregarBarrio(self, barrio):
-        if barrio not in self.barrios:
-            self.barrios[barrio] = []
+    def agregarBarrio(self, barrioId):
+        if barrioId not in self.red:
+            self.red[barrioId] = []
 
-    def agregarArista(self, barrio, arista):
-        if barrio in self.barrios:
-            self.barrios[barrio].append(arista)
+    def agregarArista(self, barrioId, arista: AristaBarrio):
+        if barrioId in self.red:
+            self.red[barrioId].append(arista)
         else:
-            self.barrios[barrio] = [arista]
+            self.red[barrioId] = [arista]
 
     def obtenerAristas(self, barrio):
-        return self.barrios.get(barrio, [])
+        return self.red.get(barrio, [])
 
     def __repr__(self):
-        return f'Red({self.barrios})'
+        return f'Red({self.red})'
 
     def toJson(self):
         return json.dumps(self.toDict())
@@ -32,14 +32,14 @@ class Red:
 
     def toDict(self):
         return {
-            'barrios': {barrio: [arista.toDict() for arista in aristas] for barrio, aristas in self.barrios.items()}
+            'barrios': {barrio: [arista.toDict() for arista in aristas] for barrio, aristas in self.red.items()}
         }
 
     @classmethod
     def fromDict(self, data):
-        self.barrios = {}
+        self.red = {}
         for barrio, aristas in data['barrios'].items():
-            self.barrios[barrio] = [AristaBarrio.fromDict(arista) for arista in aristas]
+            self.red[barrio] = [AristaBarrio.fromDict(arista) for arista in aristas]
 
     def optimizarRed(self):
         pass

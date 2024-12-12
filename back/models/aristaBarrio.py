@@ -4,20 +4,18 @@ from back.models.arista import Arista
 from back.models.nodo import Nodo
 import json
 class AristaBarrio(Arista):
-    def __init__(self, flujo: float, tank: Nodo, obstruido: int, barrio: Barrio, nodo: Nodo, flujoOptimo: float):
-        if not tank.tank:
-            raise ValueError("El nodo tiene tank tiene que tener un tank")
-        super().__init__(flujo, tank, obstruido, flujoOptimo)
-        self.barrio = barrio
-        self.nodoIntermedio = nodo
+    def __init__(self, flujo: float, tankId: str, obstruido: int, barrioId: str, nodoId: str, flujoOptimo: float):
+        self.tankId = tankId
+        super().__init__(flujo, nodoId, obstruido, flujoOptimo)
+        self.barrioId = barrioId
     def toDict(self):
         return {
             'flujo': self.flujo,
             'flujoOptimo': self.flujoOptimo,
-            'tank': self.tank.toDict(),
+            'tankId': self.tankId,
             'obstruido': self.obstruido,
-            'barrio': self.barrio.toDict(),
-            'nodoIntermedio': self.nodoIntermedio.toDict(),
+            'barrioId': self.barrio,
+            'nodoId': self.nodoId,
         }
 
     @classmethod

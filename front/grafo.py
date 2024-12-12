@@ -1,7 +1,7 @@
 import pygame
 import json
 
-def parse_grafo(filename):
+def parse_grafo(filename, barrio):
     """
     Carga y convierte un archivo JSON en listas de nodos y aristas para visualizar el grafo.
 
@@ -17,7 +17,7 @@ def parse_grafo(filename):
     nodos = {nodo_id: nodo_data for nodo_id, nodo_data in data["nodos"].items()}
     aristas = [
         (origen, arista["nodo"]["id"], arista["flujo"], bool(arista["obstruido"]))
-        for origen, conexiones in data["barrios"]["A"].items()
+        for origen, conexiones in data["barrios"][barrio].items() # "A" ahora es un parametro
         for arista in conexiones
     ]
 

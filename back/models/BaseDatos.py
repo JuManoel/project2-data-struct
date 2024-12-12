@@ -1,24 +1,22 @@
 import json
 from back.models.arista import Arista
 from back.models.nodo import Nodo
-from back.models.tank import Tank
 from back.models.barrio import Barrio
 class BaseDatos:
     def __init__(self):
-        self.data = {"nodos": {}, "aristas": {}, "barrios": {}, "tanques": {}}
+        self.data = {"nodos": {}, "aristas": {}, "barrios": {}}
 
     def almacenarNodo(self, nodo: Nodo):
         self.data["nodos"][nodo.id] = nodo.toDict()
 
-    def almacenarArista(self, arista: Arista):
-        arista_id = f"{arista.nodo.id}-{arista.flujoOptimo}"
-        self.data["aristas"][arista_id] = arista.toDict()
+    def almacenarArista(self, arista: Arista, barrio_id: str, nodo_id: str):
+        if nodo_id in self.data["barrios"][barrio_id]:
+            self.data["barrios"][barrio_id][nodo_id].append(arista.toDict())
+        else:
+            self.data["barrios"][barrio_id][nodo_id] = [arista.toDict()]
 
     def almacenarBarrio(self, barrio_id: str, barrio: Barrio):
         self.data["barrios"][barrio_id] = barrio.toDict()
-
-    def almacenarTanque(self, tanque_id: str, tanque: Tank):
-        self.data["tanques"][tanque_id] = tanque.toDict()
 
     def guardarEnArchivo(self, archivo: str):
         with open(archivo, "w") as file:

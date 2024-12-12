@@ -1,5 +1,4 @@
 from back.models.nodo import Nodo
-from back.models.tank import Tank
 from back.models.arista import Arista
 from back.models.barrio import Barrio
 from back.models.BaseDatos import BaseDatos
@@ -10,27 +9,15 @@ class ControllerRed:
 
     def crearNodo(self, id: str, tank=None):
         """Crear un nuevo nodo y almacenarlo."""
-        if isinstance(tank, dict):
-            tank = Tank.fromDict(tank)
         nodo = Nodo(id, tank)
         self.baseDatos.almacenarNodo(nodo)
         return {"message": "Nodo creado exitosamente", "nodo": nodo.toDict()}
 
-    def crearTanque(self, id: str,capacidad: float, capacidadTotal: float):
-        """Crear un nuevo tanque y almacenarlo."""
-        tanque = Tank(capacidad, capacidadTotal)
-        self.baseDatos.almacenarTanque(id,tanque)
-        return {"message": "Tanque creado exitosamente", "tanque": tanque.toDict()}
-
-    def crearArista(self, flujo: int, nodo: Nodo, obstruido: int, flujoOptimo: int):
+    def crearArista(self, flujo: int, nodoIdTo: str, obstruido: int, flujoOptimo: int, barrioId: str, nodoIdFrom: str): 
+        print(flujo, nodoIdTo, obstruido, flujoOptimo)
         """Crear una nueva arista entre dos nodos."""
-        if(nodo["tank"] != None):
-            if(isinstance(nodo["tank"], dict)):
-                nodo["tank"] = Tank.fromDict(nodo["tank"])
-        if isinstance(nodo, dict):
-            nodo = Nodo.fromDict(nodo)
-        arista = Arista(flujo, nodo, obstruido, flujoOptimo)
-        self.baseDatos.almacenarArista(arista)
+        arista = Arista(flujo, nodoIdTo, obstruido, flujoOptimo)
+        self.baseDatos.almacenarArista(arista, barrioId, nodoIdFrom)
         return {"message": "Arista creada exitosamente", "arista": arista.toDict()}
 
     def crearBarrio(self, barrio_id: str):
@@ -38,6 +25,19 @@ class ControllerRed:
         barrio = Barrio(barrio_id)
         self.baseDatos.almacenarBarrio(barrio_id,barrio)
         return {"message": "Barrio creado exitosamente", "barrio": barrio.toDict()}
+
+    def adicionarNodoBarrio(self, barrio_id: str, nodo_id: str):
+        """Adicionar un nodo a un barrio."""
+        barrio = self.baseDatos.data["barrios"][barrio_id]
+        barrio["nodos"].append(nodo_id)
+        return {"message": "Nodo añadido al barrio exitosamente", "barrio": barrio.toDict()}
+
+    def adicionarAristaBarrio(self, barrio_id: str, nodo_id: str, arista_id: str):
+        """Adicionar una arista a un nodo en un barrio."""
+        barrio = self.baseDatos.data["barrios"][barrio_id]
+        nodo = barrio["nodos"][nodo_id]
+        nodo["aristas"].append(arista_id)
+        return {"message": "Arista añadida al nodo exitosamente", "barrio": barrio.toDict()}
 
     def obtenerDatos(self):
         """Obtener todos los datos de la red."""

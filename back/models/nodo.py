@@ -17,7 +17,7 @@ class Nodo:
     def toDict(self) -> dict:
         return {
             'id': self.id,
-            'tank': self.tank.toDict() if self.tank else None
+            'tank': self.tank
         }
 
     @classmethod
