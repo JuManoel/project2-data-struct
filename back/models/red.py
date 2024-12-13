@@ -84,9 +84,7 @@ class Red:
         grafoOptimo = self.redOptima()
         menorFlujo = grafoOptimo.menorFlujo()
         for nodo in grafoOptimo.red:
-            print(grafoOptimo.red)
             for arista in grafoOptimo.red[nodo]:
-                print(arista)
                 arista["flujoOptimo"] = menorFlujo
         return grafoOptimo
 

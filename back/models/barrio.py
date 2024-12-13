@@ -99,8 +99,7 @@ class Barrio:
     def shortestPathsFromTanks(self, tankes):
         tank_nodes = [nodo for nodo in self.barrio if nodo in tankes]
         if not tank_nodes:
-            print("No se encontraron tanques.")
-            return Barrio(self.id)  # Retornar un barrio vacío si no hay tanques
+            raise ValueError("No hay tanques en el barrio")
 
         distances_from_tanks = {tank: {} for tank in tank_nodes}
         paths_from_tanks = {tank: {} for tank in tank_nodes}
@@ -136,7 +135,7 @@ class Barrio:
                     subgrafo.agregarArista(previous_node, Arista(**arista))
                     current_id = previous_node
                 else:
-                    print(f"Error: Expected tuple, but got {paths_from_tanks[tank_id][current_id]}")
+                    raise ValueError("No se encontró un camino hacia el tanque")
                     break
         return subgrafo
     def menorFlujo(self):

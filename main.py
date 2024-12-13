@@ -50,8 +50,6 @@ response_arista_gj = controller.crearArista(flujo=1, nodoIdTo=response_nodo_j["n
 response_guardar = controller.guardarEnArchivo("datos.json")
 # Mostrar datos almacenados
 response_datos = controller.obtenerDatos()
-print("Datos almacenados en la base de datos:")
-print(json.dumps(response_datos["data"], indent=4))
 # Crear el barrio B
 response_barrio_b = controller.crearBarrio("B")
 
@@ -86,7 +84,6 @@ response_arista_op = controller.crearArista(flujo=3, nodoIdTo=response_nodo_p["n
 
 # Guardar datos en archivo nuevamente
 response_guardar = controller.guardarEnArchivo("datos.json")
-print(response_guardar)
 
 # Mostrar datos almacenados nuevamente
 response_datos = controller.obtenerDatos()
@@ -111,25 +108,19 @@ optimoResponse = controller.optimizarBarrio("B")
 optimoResponse = controller.optimizarBarrio("C")
 
 response_guardar = controller.guardarEnArchivo("datos.json")
-print(response_guardar)
-print("Datos almacenados en la base de datos:")
-print(json.dumps(response_datos["data"], indent=4))
+
 
 
 
 
 # Eliminar una arista entre nodos en el barrio A
 response_eliminar_arista_ab = controller.eliminarArista(barrioId="A", nodoIdFrom="A", nodoIdTo="B")
-print(response_eliminar_arista_ab)
 
 # Eliminar un nodo en el barrio A
 response_eliminar_nodo_j = controller.eliminarNodo(barrioId="A", nodoId="J")
-print(response_eliminar_nodo_j)
 
 responseRed = controller.optimizarRed()
-print(responseRed)
 
 responseObstrucion = controller.crearObstrucion("A", "C", 2)
 
 response_guardar = controller.guardarEnArchivo("datos.json")
-print(json.dumps(response_guardar, indent=4))

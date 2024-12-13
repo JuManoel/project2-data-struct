@@ -20,7 +20,6 @@ class AristaBarrio(Arista):
 
     @classmethod
     def fromDict(cls, data):
-        print(data)
         return cls(
             flujo=data['flujo'],
             tankId=data['tankId'],
