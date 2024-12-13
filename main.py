@@ -103,6 +103,9 @@ response_arista_barrio_b_c = controller.crearAristaBarrio(flujo=6, tankId=respon
 
 response_guardar = controller.guardarEnArchivo("datos.json")
 
+responseObstrucion = controller.crearObstrucion("A", "C", 1)
+
+
 optimoResponse = controller.optimizarBarrio("A")
 optimoResponse = controller.optimizarBarrio("B")
 optimoResponse = controller.optimizarBarrio("C")

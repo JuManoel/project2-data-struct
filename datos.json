@@ -199,21 +199,21 @@
         "A": {
             "A": [
                 {
-                    "flujo": 3,
+                    "flujo": 30,
                     "nodoId": "C",
-                    "obstruido": 0,
+                    "obstruido": 1,
                     "flujoOptimo": 1
                 },
                 {
-                    "flujo": 3,
+                    "flujo": 30,
                     "nodoId": "C",
-                    "obstruido": 0,
+                    "obstruido": 1,
                     "flujoOptimo": 1
                 },
                 {
-                    "flujo": 3,
+                    "flujo": 30,
                     "nodoId": "C",
-                    "obstruido": 0,
+                    "obstruido": 1,
                     "flujoOptimo": 1
                 }
             ],
