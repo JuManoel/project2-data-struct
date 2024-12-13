@@ -20,10 +20,15 @@ class AristaBarrio(Arista):
 
     @classmethod
     def fromDict(cls, data):
-        tank = Nodo.fromDict(data['tank'])
-        barrio = Barrio.fromDict(data['barrio'])
-        nodo = Nodo.fromDict(data['nodoIntermedio'])
-        return cls(data['flujo'], data,tank, data['obstruido'], barrio, nodo, data['flujoOptimo'])
+        print(data)
+        return cls(
+            flujo=data['flujo'],
+            tankId=data['tankId'],
+            obstruido=data['obstruido'],
+            barrioId=data['barrioId'],
+            nodoId=data['nodoId'],
+            flujoOptimo=data['flujoOptimo']
+        )
 
     def toJson(self):
         return json.dumps(self.toDict())

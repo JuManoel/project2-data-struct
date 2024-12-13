@@ -53,11 +53,62 @@ class BaseDatos:
     def optimizarRed(self):
         for barrio_id in self.data["barrios"]:
             self.optimizarBarrio(barrio_id)
-        redOptima = Red()
-        redOptima.red = self.data["red"]
-        redOptima.optimizar()
+        red = Red()
+        red.red = self.data["red"]
+        redOptima = red.optimizar()
         self.data["redOptima"] = redOptima.toDict()
         return redOptima
+
+    def eliminarArista(self, barrio_id: str, nodo_id_from: str, nodo_id_to: str):
+        barrio = Barrio(barrio_id)
+        barrio.barrio = self.data["barrios"][barrio_id]
+        aux = False
+        for arista in barrio.barrio[nodo_id_from]:
+            if arista["nodoId"] == nodo_id_to:
+                barrio.barrio[nodo_id_from].remove(arista)
+                aux = True
+        if(not aux):
+            red = Red.fromDict(self.data["red"])
+            for arista in red.red[barrio_id]:
+                if arista["nodoIdFrom"] == nodo_id_from and arista["nodoIdTo"] == nodo_id_to:
+                    red.red[barrio_id].remove(arista)
+                    self.data["red"] = red.toDict()
+                    aux = True
+        if(not aux):
+            raise ValueError(f"Edge from {nodo_id_from} to {nodo_id_to} not found in neighborhood {barrio_id}.")
+        self.data["barrios"][barrio_id] = barrio.barrio
+    
+    def eliminarNodo(self, barrio_id: str, nodo_id: str):
+        barrio = Barrio(barrio_id)
+        barrio.barrio = self.data["barrios"][barrio_id]
+        del barrio.barrio[nodo_id]
+        self.data["barrios"][barrio_id] = barrio.barrio
+
+        del self.data["nodos"][nodo_id]
+        for nodoId, aristas in self.data["barrios"][barrio_id].items():
+            for arista in aristas:
+                if arista["nodoId"] == nodo_id:
+                    aristas.remove(arista)
+                    self.data["barrios"][barrio_id][nodoId] = aristas
+        for barrio_id, aristaBarrio in self.data["red"].items():
+            for arista in aristaBarrio:
+                if arista["nodoId"] == nodo_id:
+                    aristaBarrio.remove(arista)
+                    self.data["red"][barrio_id] = aristaBarrio
+
+    def crearObstruccion(self, nodo_id_from: str, nodo_id_to: str, nivel: int):
+        arista = None
+        for _, barrio in self.data["barrios"].items():
+            if nodo_id_from in barrio:
+                for arista in barrio[nodo_id_from]:
+                    if arista["nodoId"] == nodo_id_to:
+                        arista["obstruido"] = nivel
+                        break
+        if arista is None:
+            for _, aristaBarrio in self.data["red"].items():
+                for arista in aristaBarrio:
+                    if arista["tankId"] == nodo_id_from and arista["nodoId"] == nodo_id_to:
+                        arista["obstruido"] = nivel
 
     def guardarEnArchivo(self, archivo: str):
         with open(archivo, "w") as file:

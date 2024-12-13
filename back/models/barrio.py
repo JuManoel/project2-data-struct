@@ -72,7 +72,6 @@ class Barrio:
                 barrio.agregarArista(nodo_obj, arista_obj)
         return barrio
     def dijkstra(self, start: str):
-        print(self.barrio)
         # Inicializar estructuras
         distances = {nodo: float('inf') for nodo in self.barrio}
         distances[start] = 0
@@ -98,7 +97,6 @@ class Barrio:
         return distances, previous_nodes  # Retornar diccionarios
 
     def shortestPathsFromTanks(self, tankes):
-        print(tankes)
         tank_nodes = [nodo for nodo in self.barrio if nodo in tankes]
         if not tank_nodes:
             print("No se encontraron tanques.")
@@ -108,7 +106,6 @@ class Barrio:
         paths_from_tanks = {tank: {} for tank in tank_nodes}
 
         for tank in tank_nodes:
-            print(f"Ejecutando Dijkstra desde el tanque: {tank}")
             distances, previous_nodes = self.dijkstra(tank)
             distances_from_tanks[tank] = distances
             paths_from_tanks[tank] = previous_nodes
@@ -141,7 +138,6 @@ class Barrio:
                 else:
                     print(f"Error: Expected tuple, but got {paths_from_tanks[tank_id][current_id]}")
                     break
-        print(subgrafo.toDict())
         return subgrafo
     def menorFlujo(self):
         menorFlujo = float('inf')
@@ -155,8 +151,6 @@ class Barrio:
         grafoOptimo = self.shortestPathsFromTanks(nodosTanks)
         menorFlujo = self.menorFlujo()
         for nodo in grafoOptimo.barrio:
-            print(grafoOptimo.barrio)
             for arista in grafoOptimo.barrio[nodo]:
-                print(arista)
                 arista.flujoOptimo = menorFlujo
         return grafoOptimo

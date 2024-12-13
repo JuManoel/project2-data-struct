@@ -112,7 +112,21 @@ print(response_guardar)
 print("Datos almacenados en la base de datos:")
 print(json.dumps(response_datos["data"], indent=4))
 
+
+
+
+# Eliminar una arista entre nodos en el barrio A
+response_eliminar_arista_ab = controller.eliminarArista(barrioId="A", nodoIdFrom="A", nodoIdTo="B")
+print(response_eliminar_arista_ab)
+
+# Eliminar un nodo en el barrio A
+response_eliminar_nodo_j = controller.eliminarNodo(barrioId="A", nodoId="J")
+print(response_eliminar_nodo_j)
+
 responseRed = controller.optimizarRed()
 print(responseRed)
+
+responseObstrucion = controller.crearObstrucion("A", "C", 2)
+
 response_guardar = controller.guardarEnArchivo("datos.json")
 print(json.dumps(response_guardar, indent=4))

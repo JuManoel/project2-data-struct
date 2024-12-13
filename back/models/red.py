@@ -20,92 +20,74 @@ class Red:
     def obtenerAristas(self, barrio):
         return self.red.get(barrio, [])
 
-    def dijkstra(self, start: str):
-        print(self.red)
-        # Inicializar estructuras
-        distances = {nodo: float('inf') for nodo in self.red}
-        distances[start] = 0
-        previous_nodes = {nodo: None for nodo in self.red}
-        visited = set()
-        heap = [(0, start)]  # (distancia, nodo)
+    def redOptima(self):
+        # Crear una lista de todas las aristas
+        aristas = []
+        for barrio, conexiones in self.red.items():
+            for arista in conexiones:
+                aristas.append((arista["flujo"], barrio, arista["barrioId"]))
 
-        # Algoritmo principal
-        while heap:
-            current_distance, current_node = heapq.heappop(heap)
-            if current_node in visited:
-                continue
-            visited.add(current_node)
+        # Ordenar las aristas por flujo
+        aristas.sort()
 
-            for arista in self.red[current_node]:  # Iterar sobre las aristas
-                neighbor = arista["nodoId"]
-                distance = current_distance + arista["flujo"]
-                if distance < distances[neighbor]:
-                    distances[neighbor] = distance
-                    previous_nodes[neighbor] = (current_node, arista)
-                    heapq.heappush(heap, (distance, neighbor))
+        # Inicializar estructuras para el algoritmo de Kruskal
+        parent = {}
+        rank = {}
 
-        return distances, previous_nodes  # Retornar diccionarios
+        def find(nodo):
+            if parent[nodo] != nodo:
+                parent[nodo] = find(parent[nodo])
+            return parent[nodo]
 
-    def shortestPathsFromTanks(self):
-        tank_nodes = [nodo for nodo in self.red if any(arista["tankId"] == nodo for arista in self.red[nodo])]
-        if not tank_nodes:
-            print("No se encontraron tanques.")
-            return Red()  # Retornar un barrio vacío si no hay tanques
+        def union(nodo1, nodo2):
+            root1 = find(nodo1)
+            root2 = find(nodo2)
+            if root1 != root2:
+                if rank[root1] > rank[root2]:
+                    parent[root2] = root1
+            else:
+                parent[root1] = root2
+                if rank[root1] == rank[root2]:
+                    rank[root2] += 1
 
-        distances_from_tanks = {tank: {} for tank in tank_nodes}
-        paths_from_tanks = {tank: {} for tank in tank_nodes}
+        # Inicializar los conjuntos disjuntos
+        for barrio in self.red:
+            parent[barrio] = barrio
+            rank[barrio] = 0
 
-        for tank in tank_nodes:
-            print(f"Ejecutando Dijkstra desde el tanque: {tank}")
-            distances, previous_nodes = self.dijkstra(tank)
-            distances_from_tanks[tank] = distances
-            paths_from_tanks[tank] = previous_nodes
+        # Algoritmo de Kruskal para encontrar el árbol de expansión mínima
+        mst = []
+        for flujo, barrio1, barrio2 in aristas:
+            if find(barrio1) != find(barrio2):
+                union(barrio1, barrio2)
+            mst.append((barrio1, barrio2, flujo))
 
-        # Asignación de nodos a tanques
-        nodo_a_tanque = {}
-        for nodo in self.red:
-            min_distance = float('inf')
-            assigned_tank = None
-            for tank_id, distances in distances_from_tanks.items():
-                if nodo in distances and distances[nodo] < min_distance:
-                    min_distance = distances[nodo]
-                    assigned_tank = tank_id
-            if assigned_tank is not None:
-                nodo_a_tanque[nodo] = assigned_tank
+        # Crear la nueva red óptima
+        red_optima = Red()
+        for barrio in self.red:
+            red_optima.agregarBarrio(barrio)
+        for barrio1, barrio2, flujo in mst:
+            arista = next(arista for arista in self.red[barrio1] if arista["barrioId"] == barrio2)
+            red_optima.agregarArista(barrio1, arista)
 
-        # Construcción del subgrafo
-        subgrafo = Barrio(self.id)
-        for nodo_id, tank_id in nodo_a_tanque.items():
-            subgrafo.agregarNodo(nodo_id)
+        return red_optima
 
-            # Reconstrucción del camino hacia el tanque
-            current_id = nodo_id
-            while current_id != tank_id:
-                if isinstance(paths_from_tanks[tank_id][current_id], tuple):
-                    previous_node, arista = paths_from_tanks[tank_id][current_id]
-                    subgrafo.agregarArista(previous_node, AristaBarrio(**arista))
-                    current_id = previous_node
-                else:
-                    print(f"Error: Expected tuple, but got {paths_from_tanks[tank_id][current_id]}")
-                    break
-        print(subgrafo.toDict())
-        return subgrafo
     def menorFlujo(self):
         menorFlujo = float('inf')
-        for nodo in self.barrio:
-            for arista in self.barrio[nodo]:
+        for barrio in self.red:
+            for arista in self.red[barrio]:
                 if arista["flujo"] < menorFlujo:
                     menorFlujo = arista["flujo"]
         return menorFlujo
     
     def optimizar(self):
-        grafoOptimo = self.shortestPathsFromTanks()
-        menorFlujo = self.menorFlujo()
-        for nodo in grafoOptimo.barrio:
-            print(grafoOptimo.barrio)
-            for arista in grafoOptimo.barrio[nodo]:
+        grafoOptimo = self.redOptima()
+        menorFlujo = grafoOptimo.menorFlujo()
+        for nodo in grafoOptimo.red:
+            print(grafoOptimo.red)
+            for arista in grafoOptimo.red[nodo]:
                 print(arista)
-                arista.flujoOptimo = menorFlujo
+                arista["flujoOptimo"] = menorFlujo
         return grafoOptimo
 
     def __repr__(self):
@@ -121,13 +103,13 @@ class Red:
 
     def toDict(self):
         return {
-            'barrios': {barrio: [arista.toDict() for arista in aristas] for barrio, aristas in self.red.items()}
+            'barrios': {barrio: [arista for arista in aristas] for barrio, aristas in self.red.items()}
         }
 
     @classmethod
     def fromDict(self, data):
         self.red = {}
-        for barrio, aristas in data['barrios'].items():
+        for barrio, aristas in data.items():
             self.red[barrio] = [AristaBarrio.fromDict(arista) for arista in aristas]
 
     def optimizarRed(self):

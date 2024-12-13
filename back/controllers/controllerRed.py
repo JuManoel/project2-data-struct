@@ -29,7 +29,10 @@ class ControllerRed:
         arista = AristaBarrio(flujo, tankId, obstruido, barrioId, nodoId, flujoOptimo)
         self.baseDatos.almacenarAristaBarrio(arista)
         return {"message": "Arista creada exitosamente", "arista": arista.toDict()}
-    
+    def crearObstrucion(self, nodoFrom: str, nodoTo: str, nivel: int):
+        """Crear una obstrucción en un nodo."""
+        self.baseDatos.crearObstruccion(nodoFrom, nodoTo, nivel)
+        return {"message": "Obstrucción creada exitosamente"}
     def optimizarBarrio(self, barrioId: str):
         barrioOprimo = self.baseDatos.optimizarBarrio(barrioId)
         return {"message": "Barrio optimizado exitosamente", "barrioOptimo": barrioOprimo.toDict()}
@@ -37,6 +40,16 @@ class ControllerRed:
     def optimizarRed(self):
         redOptima = self.baseDatos.optimizarRed()
         return {"message": "Red optimizada exitosamente", "redOptima": redOptima.toDict()}
+
+    def eliminarArista(self, barrioId: str, nodoIdFrom: str, nodoIdTo: str):
+        """Eliminar una arista entre dos nodos."""
+        self.baseDatos.eliminarArista(barrioId, nodoIdFrom, nodoIdTo)
+        return {"message": "Arista eliminada exitosamente"}
+
+    def eliminarNodo(self, barrioId: str, nodoId: str):
+        """Eliminar un nodo."""
+        self.baseDatos.eliminarNodo(barrioId, nodoId)
+        return {"message": "Nodo eliminado exitosamente"}
 
     def obtenerDatos(self):
         """Obtener todos los datos de la red."""
